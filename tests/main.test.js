@@ -4,14 +4,14 @@ import {
   forEach, omit, get, clone
 } from 'lodash';
 
-chai.use(chaiUrl);
-
 import {
   generateWithingsRequestURL,
   generateWithingsAuthorizeURL,
   generateWithingsTokenURL,
   generateWithingsMeasureURL
 } from '../src';
+
+chai.use(chaiUrl);
 
 describe('# Withings ToolBox Tests Suite', () => {
   const callback = 'http://localhost';
@@ -55,11 +55,11 @@ describe('# Withings ToolBox Tests Suite', () => {
           call = method(token, secret);
         }
         return call
-        .catch((err) => {
-          chai.expect(err).not.to.be.undefined;
-          chai.expect(err).to.have.property('message')
-          .that.is.equal('"value" is required');
-        });
+          .catch((err) => {
+            chai.expect(err).not.to.be.undefined;
+            chai.expect(err).to.have.property('message')
+            .that.is.equal('"value" is required');
+          });
       });
 
       forEach(['oauthConsumerKey', 'oauthConsumerSecret'], key =>
@@ -73,11 +73,11 @@ describe('# Withings ToolBox Tests Suite', () => {
             call = method(token, secret, omit(clone(options), [key]));
           }
           return call
-          .catch((err) => {
-            chai.expect(err).not.to.be.undefined;
-            chai.expect(err).to.have.property('message')
-            .that.is.equal(`"${key}" is required`);
-          });
+            .catch((err) => {
+              chai.expect(err).not.to.be.undefined;
+              chai.expect(err).to.have.property('message')
+              .that.is.equal(`"${key}" is required`);
+            });
         }));
 
       if (cb) {
@@ -98,11 +98,11 @@ describe('# Withings ToolBox Tests Suite', () => {
             call = method('', secret, clone(options));
           }
           return call
-          .catch((err) => {
-            chai.expect(err).not.to.be.undefined;
-            chai.expect(err).to.have.property('message')
-            .that.is.equal('"token" is not allowed to be empty');
-          });
+            .catch((err) => {
+              chai.expect(err).not.to.be.undefined;
+              chai.expect(err).to.have.property('message')
+              .that.is.equal('"token" is not allowed to be empty');
+            });
         });
 
         it('should fail with empty secret', () => {
@@ -113,21 +113,21 @@ describe('# Withings ToolBox Tests Suite', () => {
             call = method(token, '', clone(options));
           }
           return call
-          .catch((err) => {
-            chai.expect(err).not.to.be.undefined;
-            chai.expect(err).to.have.property('message')
-            .that.is.equal('"secret" is not allowed to be empty');
-          });
+            .catch((err) => {
+              chai.expect(err).not.to.be.undefined;
+              chai.expect(err).to.have.property('message')
+              .that.is.equal('"secret" is not allowed to be empty');
+            });
         });
 
         if (userid) {
           it('should fail with empty userid', () => {
             return method(token, secret, '', clone(options))
-            .catch((err) => {
-              chai.expect(err).not.to.be.undefined;
-              chai.expect(err).to.have.property('message')
-              .that.is.equal('"userid" is not allowed to be empty');
-            });
+              .catch((err) => {
+                chai.expect(err).not.to.be.undefined;
+                chai.expect(err).to.have.property('message')
+                .that.is.equal('"userid" is not allowed to be empty');
+              });
           });
         }
       }
@@ -142,11 +142,11 @@ describe('# Withings ToolBox Tests Suite', () => {
           call = method(token, secret, clone(options));
         }
         return call
-        .then((url) => {
-          chai.expect(url).to.have.hostname('developer.health.nokia.com');
-          chai.expect(url).to.contain.path(path);
-          chai.expect(url).to.have.protocol('https');
-        });
+          .then((url) => {
+            chai.expect(url).to.have.hostname('developer.health.nokia.com');
+            chai.expect(url).to.contain.path(path);
+            chai.expect(url).to.have.protocol('https');
+          });
       });
     });
   });

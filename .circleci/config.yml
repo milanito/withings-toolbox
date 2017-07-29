@@ -58,6 +58,18 @@ jobs:
           path: coverage
           destination: coverage
 
+  codacy:
+    docker:
+      - image: circleci/node:6.10.3
+        user: root
+    steps:
+      - checkout
+      - restore_cache:
+          keys: dependencies
+      - run:
+          name: Update coverage
+          command: yarn codacy
+
   build:
     docker:
       - image: circleci/node:6.10.3
@@ -84,7 +96,7 @@ jobs:
 
 workflows:
   version: 2
-  docs_test_build_publish:
+  full_workflow:
     jobs:
       - install
       - docs:
@@ -93,19 +105,25 @@ workflows:
       - test:
           requires:
             - install
+      - codacy:
+          requires:
+            - test
+          filters:
+            branches:
+              only:
+                - master
       - build:
           requires:
-            - install
             - test
             - docs
           filters:
             branches:
               only:
-                - prod
+                - master
       - publish:
           requires:
             - build
           filters:
             branches:
               only:
-                - prod
+                - master

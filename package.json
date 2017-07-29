@@ -13,11 +13,12 @@
   "bugs": "",
   "scripts": {
     "build": "gulp babel",
+    "codacy": "cat ./coverage/lcov.info | ./node_modules/.bin/codacy-coverage",
     "doc": "gulp doc",
-    "test": "NODE_ENV=test gulp test",
     "lint": "gulp lint",
     "prepush": "gulp lint && NODE_ENV=test gulp test",
-    "prepublish": "gulp babel"
+    "prepublish": "gulp babel",
+    "test": "NODE_ENV=test gulp test"
   },
   "devDependencies": {
     "babel-core": "^6.25.0",
@@ -27,6 +28,7 @@
     "babel-preset-stage-2": "^6.24.1",
     "chai": "^4.1.0",
     "chai-url": "^1.0.4",
+    "codacy-coverage": "^2.0.2",
     "eslint-config-airbnb-base": "^11.3.1",
     "eslint-plugin-import": "^2.7.0",
     "gulp": "^3.9.1",
@@ -37,6 +39,7 @@
     "gulp-inject-modules": "^1.0.0",
     "gulp-mocha": "^3.0.1",
     "husky": "^0.14.3",
+    "mocha-lcov-reporter": "^1.3.0",
     "rimraf": "^2.6.1"
   },
   "babel": {
