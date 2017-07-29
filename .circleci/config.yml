@@ -95,6 +95,7 @@ workflows:
             - install
       - build:
           requires:
+            - install
             - test
             - docs
           filters:
