@@ -7,10 +7,10 @@ import injectModules from 'gulp-inject-modules';
 import mocha from 'gulp-mocha';
 import rimraf from 'rimraf';
 
-gulp.task('clean', (done) => rimraf('dist', () => done()));
+gulp.task('clean', done => rimraf('dist', () => done()));
 
 gulp.task('doc', () => gulp.src('./src')
-.pipe(esdoc({ destination: './docs'  })));
+.pipe(esdoc({ destination: './docs' })));
 
 gulp.task('lint', () => gulp.src(['./src/**/*.js',
   '!dist/**', '!node_modules/**', '!coverage/**'])
