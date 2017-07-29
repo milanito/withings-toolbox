@@ -48,6 +48,9 @@ jobs:
       - store_artifacts:
           path: coverage
           destination: coverage
+      - save_cache:
+          key: coverage
+          paths: coverage
 
   codacy:
     docker:
@@ -56,7 +59,9 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          keys: dependencies
+          keys:
+            - dependencies
+            - coverage
       - run:
           name: Install coverage
           command: npm install -g codacy-coverage
