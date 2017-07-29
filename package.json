@@ -1,8 +1,11 @@
 {
   "name": "withings-toolbox",
-  "version": "0.1.3",
+  "version": "0.2.0",
   "description": "This is a withings toolbox to handle their API",
   "main": "dist/index.js",
+  "files": [
+    "dist"
+  ],
   "author": "Matthieu Rondeau <mr@umanlife.com>",
   "license": "MIT",
   "keywords": [
