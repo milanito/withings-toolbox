@@ -8,18 +8,13 @@ jobs:
       - restore_cache:
           keys: dependencies
       - run:
-          name: Configure npm registry
-          command: echo -e "registry=https://registry.npmjs.org/\n//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/.npmrc
-      - run:
           name: Install dependencies
-          command: apt-get install build-essential && npm install -g node-gyp && yarn && npm install optipng-bin node-sass
+          command: apt-get install build-essential && npm install -g node-gyp && yarn
       - save_cache:
           key: dependencies
           paths:
             - "~/.npm"
             - "node_modules"
-            - "/home/ubuntu/nvm/versions/node/v6.10.3/bin"
-            - "/home/ubuntu/nvm/versions/node/v6.10.3/lib/node_modules"
 
   docs:
     docker:
@@ -32,10 +27,6 @@ jobs:
       - run:
           name: Generate documentation
           command: yarn doc
-      - save_cache:
-          key: docs-{{ .Branch }}-{{ .Revision }}
-          paths:
-            - docs
       - store_artifacts:
           path: docs
           destination: documentation
@@ -67,8 +58,11 @@ jobs:
       - restore_cache:
           keys: dependencies
       - run:
+          name: Install coverage
+          command: npm install -g codacy-coverage
+      - run:
           name: Update coverage
-          command: yarn codacy
+          command: cat ./coverage/lcov.info | codacy-coverage
 
   build:
     docker:
@@ -90,6 +84,9 @@ jobs:
       - checkout
       - restore_cache:
           keys: dependencies
+      - run:
+          name: Configure npm registry
+          command: echo -e "registry=https://registry.npmjs.org/\n//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/.npmrc
       - run:
           name: Push npm module
           command: npm publish
@@ -115,7 +112,6 @@ workflows:
       - build:
           requires:
             - test
-            - docs
           filters:
             branches:
               only:
