@@ -80,6 +80,9 @@ jobs:
       - run:
           name: Run build
           command: yarn build
+      - save_cache:
+          key: build-{{ .Branch }}-{{ .BuildNum }}
+          paths: dist
 
   publish:
     docker:
@@ -88,7 +91,9 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          keys: dependencies
+          key: dependencies
+      - restore_cache:
+          key: build
       - run:
           name: Configure npm registry
           command: echo -e "registry=https://registry.npmjs.org/\n//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/.npmrc
