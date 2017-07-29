@@ -38,7 +38,7 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          keys: dependencies
+          key: dependencies
       - run:
           name: Run Lint
           command: yarn lint
@@ -49,7 +49,7 @@ jobs:
           path: coverage
           destination: coverage
       - save_cache:
-          key: coverage
+          key: coverage-{{ checksum "coverage/lcov.info" }}
           paths: coverage
 
   codacy:
@@ -59,9 +59,9 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          keys:
-            - dependencies
-            - coverage
+          key: dependencies
+      - restore_cache:
+          key: coverage
       - run:
           name: Install coverage
           command: npm install -g codacy-coverage
