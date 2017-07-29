@@ -1,0 +1,110 @@
+jobs:
+  install:
+    docker:
+      - image: circleci/node:6.10.3
+        user: root
+    steps:
+      - checkout
+      - restore_cache:
+          keys: dependencies
+      - run:
+          name: Configure npm registry
+          command: echo -e "registry=https://registry.npmjs.org/\n//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/.npmrc
+      - run:
+          name: Install dependencies
+          command: apt-get install build-essential && npm install -g node-gyp && yarn && npm install optipng-bin node-sass
+      - save_cache:
+          key: dependencies
+          paths:
+            - "~/.npm"
+            - "node_modules"
+            - "/home/ubuntu/nvm/versions/node/v6.10.3/bin"
+            - "/home/ubuntu/nvm/versions/node/v6.10.3/lib/node_modules"
+
+  docs:
+    docker:
+      - image: circleci/node:6.10.3
+        user: root
+    steps:
+      - checkout
+      - restore_cache:
+          keys: dependencies
+      - run:
+          name: Generate documentation
+          command: yarn doc
+      - save_cache:
+          key: docs-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - docs
+      - store_artifacts:
+          path: docs
+          destination: documentation
+
+  test:
+    docker:
+      - image: circleci/node:6.10.3
+        user: root
+    steps:
+      - checkout
+      - restore_cache:
+          keys: dependencies
+      - run:
+          name: Run Lint
+          command: yarn lint
+      - run:
+          name: Run tests
+          command: yarn test
+      - store_artifacts:
+          path: coverage
+          destination: coverage
+
+  build:
+    docker:
+      - image: circleci/node:6.10.3
+        user: root
+    steps:
+      - checkout
+      - restore_cache:
+          keys: dependencies
+      - run:
+          name: Run build
+          command: yarn build
+
+  publish:
+    docker:
+      - image: circleci/node:6.10.3
+        user: root
+    steps:
+      - checkout
+      - restore_cache:
+          keys: dependencies
+      - run:
+          name: Push npm module
+          command: npm publish
+
+workflows:
+  version: 2
+  docs_test_build_publish:
+    jobs:
+      - install
+      - docs:
+          requires:
+            - install
+      - test:
+          requires:
+            - install
+      - build:
+          requires:
+            - test
+            - docs
+          filters:
+            branches:
+              only:
+                - prod
+      - publish:
+          requires:
+            - build
+          filters:
+            branches:
+              only:
+                - prod

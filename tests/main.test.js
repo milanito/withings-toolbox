@@ -9,7 +9,8 @@ chai.use(chaiUrl);
 import {
   generateWithingsRequestURL,
   generateWithingsAuthorizeURL,
-  generateWithingsTokenURL
+  generateWithingsTokenURL,
+  generateWithingsMeasureURL
 } from '../src';
 
 describe('# Withings ToolBox Tests Suite', () => {
@@ -37,6 +38,11 @@ describe('# Withings ToolBox Tests Suite', () => {
     path: '/account/access_token',
     cb: false,
     userid: '123'
+  }, {
+    name: 'generateWithingsMeasureURL',
+    method: generateWithingsMeasureURL,
+    path: '/measure',
+    cb: false
   }], ({ name, method, path, cb, userid }) => {
     describe(`## ${name} method`, () => {
       it('should fail with no options', () => {

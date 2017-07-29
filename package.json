@@ -5,7 +5,10 @@
   "main": "dist/index.js",
   "author": "Matthieu Rondeau <mr@umanlife.com>",
   "license": "MIT",
-  "keywords": ["withings", "toolbox"],
+  "keywords": [
+    "withings",
+    "toolbox"
+  ],
   "repository": "",
   "bugs": "",
   "scripts": {

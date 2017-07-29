@@ -16,6 +16,7 @@ import {
   withingsRequestTokenURL,
   withingsAuthorizeURL,
   withingsGenerateTokenURL,
+  withingsMeasureURL,
   withingsSignatureMethod,
   withingsOauthVersion
 } from './config';
@@ -35,6 +36,21 @@ const generateDefaultBuildObject = oauthConsumerKey => clone({
     oauth_version: withingsOauthVersion,
   }
 });
+
+/**
+ * This function generated the URL to request mesure for a user
+ * @param { String } token The request token
+ * @param { String } secret The request secret
+ * @param { String } oauthConsumerKey The consumer key
+ * @param { String } oauthConsumerSecret The consumer secret
+ * @returns { String } the URL to request
+ */
+const _generateWithingsMeasureURL = (token, secret, oauthConsumerKey, oauthConsumerSecret) =>
+  builder(merge(generateDefaultBuildObject(oauthConsumerKey), {
+    queryParams: {
+      oauth_token: token,
+    }
+  }), withingsMeasureURL, join(map([oauthConsumerSecret, secret], it => escape(it)), '&'));
 
 /**
  * This function generated the URL to retrieve the user
@@ -77,7 +93,7 @@ const _generateWithingsAuthorizeURL = (token, secret, oauthConsumerKey, oauthCon
  * @param { String } oauthConsumerSecret The consumer secret
  * @returns { String } the URL to request
  */
-const _generateWithingsRequestURL = (callback, oauthConsumerKey, oauthConsumerSecret) =>
+const _generateWithingsRequestURL = ({ callback }, oauthConsumerKey, oauthConsumerSecret) =>
   builder(merge(generateDefaultBuildObject(oauthConsumerKey), {
     queryParams: {
       oauth_callback: escape(callback),
@@ -97,7 +113,6 @@ export const generateWithingsRequestURL = (callback, options) =>
     .then(({ value, oauthConsumerKey, oauthConsumerSecret }) => new Promise(resolve =>
       resolve(_generateWithingsRequestURL(value, oauthConsumerKey, oauthConsumerSecret))))
     .catch(errorsHandler);
-
 
 /**
  * This function generated the URL to retrieve the user
@@ -129,5 +144,21 @@ export const generateWithingsTokenURL = (token, secret, userid, options) =>
     .then(opts => validateTokenSecretUserId(token, secret, userid, opts))
     .then(({ value, oauthConsumerKey, oauthConsumerSecret }) => new Promise(resolve =>
       resolve(_generateWithingsTokenURL(value.token, value.secret, value.userid,
+        oauthConsumerKey, oauthConsumerSecret))))
+    .catch(errorsHandler);
+
+/**
+ * This function generated the URL to retrieve the user
+ * mesure
+ * @param { String } token The user token
+ * @param { String } secret The user secret
+ * @param { Object } options The options object
+ * @returns { String } the URL to request
+ */
+export const generateWithingsMeasureURL = (token, secret, options) =>
+  validateOptions(clone(options))
+    .then(opts => validateTokenSecret(token, secret, opts))
+    .then(({ value, oauthConsumerKey, oauthConsumerSecret }) => new Promise(resolve =>
+      resolve(_generateWithingsMeasureURL(value.token, value.secret,
         oauthConsumerKey, oauthConsumerSecret))))
     .catch(errorsHandler);

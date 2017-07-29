@@ -2,7 +2,7 @@ import Joi from 'joi';
 import { join, clone } from 'lodash';
 
 const constructWithingsURL = path => join([
-  'https://developer.health.nokia.com/account', path
+  'https://developer.health.nokia.com', path
 ], '/');
 
 export const withingsOptionsSchema = Joi.object().keys({
@@ -25,11 +25,13 @@ export const tokenSecretUserIdSchema = clone(tokenSecretSchema).keys({
   userid: Joi.string().required()
 });
 
-export const withingsRequestTokenURL = constructWithingsURL('request_token');
+export const withingsRequestTokenURL = constructWithingsURL('account/request_token');
 
-export const withingsAuthorizeURL = constructWithingsURL('authorize');
+export const withingsAuthorizeURL = constructWithingsURL('account/authorize');
 
-export const withingsGenerateTokenURL = constructWithingsURL('access_token');
+export const withingsGenerateTokenURL = constructWithingsURL('account/access_token');
+
+export const withingsMeasureURL = constructWithingsURL('measure');
 
 export const withingsSignatureMethod = 'HMAC-SHA1';
 

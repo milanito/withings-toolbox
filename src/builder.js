@@ -1,7 +1,8 @@
 import buildUrl from 'build-url';
+import { escape } from 'querystring';
 import crypto from 'crypto';
 import {
-  join, omit, merge,
+  join, merge,
   get, reduce, keys
 } from 'lodash';
 
@@ -17,8 +18,11 @@ import {
 export default (urlOptions, host, signingKey) => {
   const baseString = join([
     'GET',
-    escape(buildUrl(host, omit(urlOptions, ['queryParams']))),
-    escape(buildUrl('', omit(urlOptions, ['path'])).substring(1))
+    escape(buildUrl(host)),
+    escape(join(reduce(keys(get(urlOptions, 'queryParams', {})).sort(), (total, key) => {
+      total.push(join([key, get(urlOptions.queryParams, key, '')], '='));
+      return total;
+    }, []), '&'))
   ], '&');
   const signature = crypto
     .createHmac('sha1', signingKey)
