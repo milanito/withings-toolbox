@@ -1,6 +1,6 @@
 # Withings Toolbox
 
-[![CircleCI](https://circleci.com/gh/milanito/withings-toolbox.svg?style=svg)](https://circleci.com/gh/milanito/withings-toolbox) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/a3e7a9b1812848e39ab485b8d29c245f)](https://www.codacy.com/app/rondeau.matthieu.r/withings-toolbox?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=milanito/withings-toolbox&amp;utm_campaign=Badge_Grade)
+[![CircleCI](https://circleci.com/gh/milanito/withings-toolbox.svg?style=svg)](https://circleci.com/gh/milanito/withings-toolbox) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/a3e7a9b1812848e39ab485b8d29c245f)](https://www.codacy.com/app/rondeau.matthieu.r/withings-toolbox?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=milanito/withings-toolbox&amp;utm_campaign=Badge_Grade) [![Codacy Badge](https://api.codacy.com/project/badge/Coverage/a3e7a9b1812848e39ab485b8d29c245f)](https://www.codacy.com/app/rondeau.matthieu.r/withings-toolbox?utm_source=github.com&utm_medium=referral&utm_content=milanito/withings-toolbox&utm_campaign=Badge_Coverage)
 
 [![NPM](https://nodei.co/npm/withings-toolbox.png)](https://nodei.co/npm/withings-toolbox/)
 
