@@ -8,15 +8,17 @@ import {
   generateWithingsRequestURL,
   generateWithingsAuthorizeURL,
   generateWithingsTokenURL,
-  generateWithingsMeasureURL
+  generateWithingsMeasureBodyURL,
+  generateWithingsMeasureActivityURL,
+  generateWithingsSleepSummaryURL,
 } from '../src';
 
 chai.use(chaiUrl);
 
 describe('# Withings ToolBox Tests Suite', () => {
   const callback = 'http://localhost';
-  const token = 'sometoken';
-  const secret = 'somesecret';
+  const token = 'test';
+  const secret = 'test';
   const options = {
     oauthConsumerKey: 'test',
     oauthConsumerSecret: 'test',
@@ -38,11 +40,24 @@ describe('# Withings ToolBox Tests Suite', () => {
     path: '/account/access_token',
     cb: false
   }, {
-    name: 'generateWithingsMeasureURL',
-    method: generateWithingsMeasureURL,
+    name: 'generateWithingsMeasureBodyURL',
+    method: generateWithingsMeasureBodyURL,
     path: '/measure',
     cb: false,
+    userid: '136',
     http: true
+  }, {
+    name: 'generateWithingsMeasureActivityURL',
+    method: generateWithingsMeasureActivityURL,
+    path: '/measure',
+    cb: false,
+    userid: '136'
+  }, {
+    name: 'generateWithingsSleepSummaryURL',
+    method: generateWithingsSleepSummaryURL,
+    path: '/sleep',
+    cb: false,
+    userid: '136'
   }], ({ name, method, path, cb, userid, http }) => {
     describe(`## ${name} method`, () => {
       it('should fail with no options', () => {
