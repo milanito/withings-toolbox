@@ -34,6 +34,11 @@ export const withingsGenerateTokenURL = constructWithingsURL('access_token');
 
 export const withingsMeasureURL = constructWithingsURL('measure', 'http://api.health.nokia.com');
 
+export const withingsMeasureV2URL = constructWithingsURL('measure',
+  'https://api.health.nokia.com/v2');
+
+export const withingsSleepURL = constructWithingsURL('sleep', 'https://api.health.nokia.com/v2');
+
 export const withingsSignatureMethod = 'HMAC-SHA1';
 
 export const withingsOauthVersion = '1.0';

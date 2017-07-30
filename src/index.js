@@ -10,13 +10,15 @@ import builder from './builder';
 import errorsHandler from './errors';
 import {
   validateOptions, validateCallback,
-  validateTokenSecret
+  validateTokenSecret, validateTokenSecretUserId
 } from './validator';
 import {
   withingsRequestTokenURL,
   withingsAuthorizeURL,
   withingsGenerateTokenURL,
   withingsMeasureURL,
+  withingsMeasureV2URL,
+  withingsSleepURL,
   withingsSignatureMethod,
   withingsOauthVersion
 } from './config';
@@ -38,17 +40,56 @@ const generateDefaultBuildObject = oauthConsumerKey => clone({
 });
 
 /**
- * This function generated the URL to request mesure for a user
+ * This function generated the URL to request activity for a user
  * @param { String } token The request token
  * @param { String } secret The request secret
  * @param { String } oauthConsumerKey The consumer key
  * @param { String } oauthConsumerSecret The consumer secret
  * @returns { String } the URL to request
  */
-const _generateWithingsMeasureURL = (token, secret, oauthConsumerKey, oauthConsumerSecret) =>
+const _generateWithingsSleepSummaryURL = (token, secret, userid,
+  oauthConsumerKey, oauthConsumerSecret) =>
   builder(merge(generateDefaultBuildObject(oauthConsumerKey), {
     queryParams: {
       oauth_token: token,
+      userid,
+      action: 'getsummary'
+    }
+  }), withingsSleepURL, join(map([oauthConsumerSecret, secret], it => escape(it)), '&'));
+
+/**
+ * This function generated the URL to request activity for a user
+ * @param { String } token The request token
+ * @param { String } secret The request secret
+ * @param { String } oauthConsumerKey The consumer key
+ * @param { String } oauthConsumerSecret The consumer secret
+ * @returns { String } the URL to request
+ */
+const _generateWithingsMeasureActivityURL = (token, secret, userid,
+  oauthConsumerKey, oauthConsumerSecret) =>
+  builder(merge(generateDefaultBuildObject(oauthConsumerKey), {
+    queryParams: {
+      oauth_token: token,
+      userid,
+      action: 'getactivity'
+    }
+  }), withingsMeasureV2URL, join(map([oauthConsumerSecret, secret], it => escape(it)), '&'));
+
+/**
+ * This function generated the URL to request body measure for a user
+ * @param { String } token The request token
+ * @param { String } secret The request secret
+ * @param { String } oauthConsumerKey The consumer key
+ * @param { String } oauthConsumerSecret The consumer secret
+ * @returns { String } the URL to request
+ */
+const _generateWithingsMeasureBodyURL = (token, secret, userid,
+  oauthConsumerKey, oauthConsumerSecret) =>
+  builder(merge(generateDefaultBuildObject(oauthConsumerKey), {
+    queryParams: {
+      oauth_token: token,
+      userid,
+      action: 'getmeas'
     }
   }), withingsMeasureURL, join(map([oauthConsumerSecret, secret], it => escape(it)), '&'));
 
@@ -62,10 +103,11 @@ const _generateWithingsMeasureURL = (token, secret, oauthConsumerKey, oauthConsu
  * @param { String } oauthConsumerSecret The consumer secret
  * @returns { String } the URL to request
  */
-const _generateWithingsTokenURL = (token, secret, oauthConsumerKey, oauthConsumerSecret) =>
+const _generateWithingsTokenURL = (token, secret, userid, oauthConsumerKey, oauthConsumerSecret) =>
   builder(merge(generateDefaultBuildObject(oauthConsumerKey), {
     queryParams: {
       oauth_token: token,
+      userid
     }
   }), withingsGenerateTokenURL, join(map([oauthConsumerSecret, secret], it => escape(it)), '&'));
 
@@ -147,16 +189,48 @@ export const generateWithingsTokenURL = (token, secret, options) =>
 
 /**
  * This function generated the URL to retrieve the user
- * mesure
+ * body measure
  * @param { String } token The user token
  * @param { String } secret The user secret
  * @param { Object } options The options object
  * @returns { String } the URL to request
  */
-export const generateWithingsMeasureURL = (token, secret, options) =>
+export const generateWithingsMeasureBodyURL = (token, secret, userid, options) =>
   validateOptions(clone(options))
-    .then(opts => validateTokenSecret(token, secret, opts))
+    .then(opts => validateTokenSecretUserId(token, secret, userid, opts))
     .then(({ value, oauthConsumerKey, oauthConsumerSecret }) => new Promise(resolve =>
-      resolve(_generateWithingsMeasureURL(value.token, value.secret,
+      resolve(_generateWithingsMeasureBodyURL(value.token, value.secret, value.userid,
+        oauthConsumerKey, oauthConsumerSecret))))
+    .catch(errorsHandler);
+
+/**
+ * This function generated the URL to retrieve the user
+ * activity
+ * @param { String } token The user token
+ * @param { String } secret The user secret
+ * @param { Object } options The options object
+ * @returns { String } the URL to request
+ */
+export const generateWithingsMeasureActivityURL = (token, secret, userid, options) =>
+  validateOptions(clone(options))
+    .then(opts => validateTokenSecretUserId(token, secret, userid, opts))
+    .then(({ value, oauthConsumerKey, oauthConsumerSecret }) => new Promise(resolve =>
+      resolve(_generateWithingsMeasureActivityURL(value.token, value.secret, value.userid,
+        oauthConsumerKey, oauthConsumerSecret))))
+    .catch(errorsHandler);
+
+/**
+ * This function generated the URL to retrieve the user
+ * sleep summary
+ * @param { String } token The user token
+ * @param { String } secret The user secret
+ * @param { Object } options The options object
+ * @returns { String } the URL to request
+ */
+export const generateWithingsSleepSummaryURL = (token, secret, userid, options) =>
+  validateOptions(clone(options))
+    .then(opts => validateTokenSecretUserId(token, secret, userid, opts))
+    .then(({ value, oauthConsumerKey, oauthConsumerSecret }) => new Promise(resolve =>
+      resolve(_generateWithingsSleepSummaryURL(value.token, value.secret, value.userid,
         oauthConsumerKey, oauthConsumerSecret))))
     .catch(errorsHandler);
