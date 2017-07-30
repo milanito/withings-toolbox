@@ -44,13 +44,13 @@ The third step is used to get a access token URL. Use it like this :
 
     import { generateWithingsTokenURL } from 'withings-toolbox';
 
-    generateWithingsTokenURL(token, secret, userid, {
+    generateWithingsTokenURL(token, secret, {
       oauthConsumerKey: 'Your withings API key',
       oauthConsumerSecret: 'Your withings API secret'
     })
     .then(url => console.log(url));
 
-Where `token` is the Request token key, `secret` is Request token secret and `userid` is the user id (as in the [Withings Documentation](https://developer.health.nokia.com/api))
+Where `token` is the Request token key and `secret` is Request token secret (as in the [Withings Documentation](https://developer.health.nokia.com/api))
 
 ### Step 4
 
@@ -64,4 +64,4 @@ The fourth step is used to get a measure URL. Use it like this :
     })
     .then(url => console.log(url));
 
-Where `token` is the previously obtained token, `secret` is the previously obtained secret, from step 3 (as in the [Withings Documentation](https://developer.health.nokia.com/api))
+Where `token` is the previously obtained token and `secret` is the previously obtained secret, from step 2 and 3 (as in the [Withings Documentation](https://developer.health.nokia.com/api))

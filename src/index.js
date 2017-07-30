@@ -10,7 +10,7 @@ import builder from './builder';
 import errorsHandler from './errors';
 import {
   validateOptions, validateCallback,
-  validateTokenSecret, validateTokenSecretUserId
+  validateTokenSecret
 } from './validator';
 import {
   withingsRequestTokenURL,
@@ -62,11 +62,10 @@ const _generateWithingsMeasureURL = (token, secret, oauthConsumerKey, oauthConsu
  * @param { String } oauthConsumerSecret The consumer secret
  * @returns { String } the URL to request
  */
-const _generateWithingsTokenURL = (token, secret, userid, oauthConsumerKey, oauthConsumerSecret) =>
+const _generateWithingsTokenURL = (token, secret, oauthConsumerKey, oauthConsumerSecret) =>
   builder(merge(generateDefaultBuildObject(oauthConsumerKey), {
     queryParams: {
       oauth_token: token,
-      userid
     }
   }), withingsGenerateTokenURL, join(map([oauthConsumerSecret, secret], it => escape(it)), '&'));
 
@@ -135,15 +134,14 @@ export const generateWithingsAuthorizeURL = (token, secret, options) =>
  * authorization token and secret
  * @param { String } token The authorization token
  * @param { String } secret The authorization secret
- * @param { String } userid The user id
  * @param { Object } options The options object
  * @returns { String } the URL to request
  */
-export const generateWithingsTokenURL = (token, secret, userid, options) =>
+export const generateWithingsTokenURL = (token, secret, options) =>
   validateOptions(clone(options))
-    .then(opts => validateTokenSecretUserId(token, secret, userid, opts))
+    .then(opts => validateTokenSecret(token, secret, opts))
     .then(({ value, oauthConsumerKey, oauthConsumerSecret }) => new Promise(resolve =>
-      resolve(_generateWithingsTokenURL(value.token, value.secret, value.userid,
+      resolve(_generateWithingsTokenURL(value.token, value.secret,
         oauthConsumerKey, oauthConsumerSecret))))
     .catch(errorsHandler);
 
