@@ -1,6 +1,6 @@
 {
   "name": "withings-toolbox",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "This is a withings toolbox to handle their API",
   "main": "dist/index.js",
   "files": [
