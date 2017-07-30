@@ -41,8 +41,9 @@ describe('# Withings ToolBox Tests Suite', () => {
     name: 'generateWithingsMeasureURL',
     method: generateWithingsMeasureURL,
     path: '/measure',
-    cb: false
-  }], ({ name, method, path, cb, userid }) => {
+    cb: false,
+    http: true
+  }], ({ name, method, path, cb, userid, http }) => {
     describe(`## ${name} method`, () => {
       it('should fail with no options', () => {
         let call;
@@ -142,9 +143,13 @@ describe('# Withings ToolBox Tests Suite', () => {
         }
         return call
           .then((url) => {
-            chai.expect(url).to.have.hostname('developer.health.nokia.com');
+            chai.expect(url).to.contain.hostname('health.nokia.com');
             chai.expect(url).to.contain.path(path);
-            chai.expect(url).to.have.protocol('https');
+            if (http) {
+              chai.expect(url).to.have.protocol('http');
+            } else {
+              chai.expect(url).to.have.protocol('https');
+            }
           });
       });
     });
