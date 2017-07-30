@@ -36,8 +36,7 @@ describe('# Withings ToolBox Tests Suite', () => {
     name: 'generateWithingsTokenURL',
     method: generateWithingsTokenURL,
     path: '/account/access_token',
-    cb: false,
-    userid: '123'
+    cb: false
   }, {
     name: 'generateWithingsMeasureURL',
     method: generateWithingsMeasureURL,

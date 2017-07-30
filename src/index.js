@@ -134,11 +134,10 @@ export const generateWithingsAuthorizeURL = (token, secret, options) =>
  * authorization token and secret
  * @param { String } token The authorization token
  * @param { String } secret The authorization secret
- * @param { String } userid The user id
  * @param { Object } options The options object
  * @returns { String } the URL to request
  */
-export const generateWithingsTokenURL = (token, secret, userid, options) =>
+export const generateWithingsTokenURL = (token, secret, options) =>
   validateOptions(clone(options))
     .then(opts => validateTokenSecret(token, secret, opts))
     .then(({ value, oauthConsumerKey, oauthConsumerSecret }) => new Promise(resolve =>
