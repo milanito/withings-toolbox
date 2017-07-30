@@ -40,7 +40,7 @@ const generateDefaultBuildObject = oauthConsumerKey => clone({
 });
 
 /**
- * This function generated the URL to request activity for a user
+ * This function generated the URL to request sleep summary for a user
  * @param { String } token The request token
  * @param { String } secret The request secret
  * @param { String } oauthConsumerKey The consumer key
